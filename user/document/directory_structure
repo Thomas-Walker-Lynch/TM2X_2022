@@ -1,0 +1,16 @@
+
+Think of a directory name as an attribute given to each file in the directory.
+
+ cantari-loadable/ - git ignored, for makefile built excecutables (cantari, singing)
+   experiment/ 
+   production/
+   test/
+ deprecated/ - old stuff kept around for easy access typically sake of example
+ document/ 
+ cantari-C/ - sourcve code (incantatio - song books)
+   experiment/
+   production/
+   test/
+ library/ - git ignored, makefile generated object code and libs
+ resource/ - stuff of general use that is not git ignored
+ temporary/ - git ignored

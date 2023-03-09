@@ -1,0 +1,118 @@
+We may bind an address space to a tape. By convention, the leftmost cell will then
+be at address zero. Each cell will be bound to one address, and adjacent cells
+will have consecutive addresses. A tape has two extents: the extent of the
+active area, and the extent of the tape itself.
+
+We can have many tapes, and each tape may have its own address space. It is
+possible that there will be a mapping between the address spaces of two tapes.
+An example of such mappings are found between the tapes described in this file
+and that of the system memory - which is a kind of tape.
+
+Consider a set of matched pairs, {<t0_address, t1_address>}, that is created
+with the following mapping.
+
+      t1_address = map_t0_to_t1( t0_address )
+      t0_address = map_t1_to_t0( t1_address )
+
+By definition, an 'array' is a structure where the above mappings reduce to:
+
+      t0_address = map_t1_to_t0( 0 ) + t1_to_t0_length * t1_eaddress
+      t1_address = (t0_address - map_t1_to_t0( 0 ) ) div t1_to_t0_length
+
+In the nomenclature of arrays ... The t1_to_t0_length is the number of t0 cells
+that lie within a t1 cell.  For a conventional array, t1_to_t0_length is a
+positive integer.  map_t1_to_t0( 0 ) is known as the 'base address', and the
+t1_address is the 'index'.
+
+t0 and t1 are two arbitrary tapes. As a tool for understanding the examples,
+a reader might want to consider the case where t0 is system memory, and t1
+is an array of words.
+
+      n(t0, t1) = t1_to_t0_length
+
+In the case where t0 is system memory, and t1 is an array of words, n(t0,t1)
+will be the largest byte index of a word in memory.  Thus, it would be 3 for a
+32 bit word, and would be 7 for a 64 bit word.  In general the function n(t0,t1)
+may be thought of as the largest index for the t1 cell as viewed in the t0
+address space, where the first t1 cell has an index of 0. We call n(t0,t1) the
+'extent'  of cell t1 in address space t0.
+
+Often the t0 and t1 tapes are implied by context, so n(t0,t1) is just called 'n',
+and referred to as the 'extent'.  Note, n + 1 is then the 'length' of a t1 cell.
+
+It follows that:
+
+      t0_address = t1_address_in_t0( 0 ) + n(t0,t1) * t1_address + t1_address
+
+The reader will recognize the intrinsic multiply.  We will give this multiple operation
+a single special character, ◬.
+
+      t0_address = t1_address_in_t0( 0 ) + n(t0,t1) ◬ t1_address
+
+If the expansion function for a tape always returns an error, then the tape is
+finite.  (Note the modified Turing Machine chapter.) Such a tape may be viewed
+as being a single cell on some higher level tape t2.  Our tape, say t1, will
+then have a value for n(t1, t2), and thus have an 'extent'.
+
+Now suppose we have such a non-expanding tape t1, and it is mapped to tape t0.
+We would like to know the extent of t1 as measured with a t0 index.  We may call
+such an entity n(t0,t1,t2).  For our specific case, this will be the system
+memory byte offset of the first byte in the last word of the t1 array.  (For a
+little endian system this first byte of the last word will be the least
+significant byte, and for a big endian system it will be the most significant
+byte.)
+
+       n(t0,t1,t2) =  n(t0,t1) n(t1,t2) + n(t0,t1)
+       n(t0,t1,t2) =  n(t0,t1) ⊡ n(t1,t2)
+
+'distance' is the difference between two addresses.  To measure distance we must
+have two addresses that come from the same address space.  The concept of
+distance is independent of any property of the cells being addressed.  It is
+purely an address space concept.
+
+The term 'length' is a memory allocation concept.  It is the distance between
+the first cell in the allocation and the last cell in it.  
+
+When a group of cells are related through some property, then that group of cells
+is known as an 'object'.  The count of cells that are given meaning by said
+property is known as the 'size' of the object.
+
+The 'length of an object' is the length of a real or imagined minimum size
+allocation for holding the object.  A given object might have different lengths
+in different situations; hence, to understand what length means the reader might
+need to know the assumptions that being made.  Issues include such things as
+allocation overhead, data alignment, structure packing, and the algorithms usedn
+for creating and modifying the object. Our next example will be a doubling
+array.  At times the length of the doubling array can be much greater than its
+size.
+
+When the object size is the same as the object length, then we say that the
+object is 'compact'.  When the length is greater than the size, then the object
+leaves 'holes' in the allocation.  When the object is entirely allocated, the
+length will always be greater than or equal to the size.
+
+A compound object is one that spans multiple allocations. The definition of
+'length' for a compound object is the sum of the length of the individual
+allocations optionally taking into account the packing overhead and effiency of
+the allocation blocks.  If the object is static, length will be a constant. If
+the object is dynamic it can change with the number of computation steps.
+
+When writing a memory mananager, allocatiosn themselves become objects. This is
+a problem that has two levels. The memory manager is looking down on the
+allocations as through they were objects.  The memory manager itself does not
+care that they are going to be someone else's allocations.  In this case
+the objects have size, and they just happen to also be allocations.
+
+When we work on proofs, we typically look at the maximum upper bound on the size
+of dynamic objects in the presence of the algorithm that is being used to modify
+them as a function of the number of steps taken in the computation.  However, if
+we want to gaurantee that there is enough memory in a system, we need to look at
+the maxium upper bound on the length of an object in the presnece of the
+algorithm used to modify over the time that the computation will be running. If
+we know specifics about the data inputs, these constraints may be used to refine
+the result.
+
+
+                   
+
+

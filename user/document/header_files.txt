@@ -1,0 +1,20 @@
+
+
+File names ending .lib.c  are compiled into a library.
+Files names ending in .cli.c  are compiled for invocation from the command line.
+File names ending in .isq.c  are instruction sequence source code.
+
+We do not use separate header files.  Instead source code is separated into sections using
+macros.
+
+In the .isq.c file you will see:
+
+#if defined(DECLARATION)
+  // stuff that used to go into a header file
+#endif 
+
+#if defined(DEFINITION)
+  // our sequence stuff, has no analog in old code
+#endif
+
+

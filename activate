@@ -1,0 +1,7 @@
+
+export RESOURCE="$REPO_DIR/resource"
+export PATH="$REPO_HOME/user/cantari/tool:$PATH"
+cd "$REPO_HOME"/user
+
+
+

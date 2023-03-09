@@ -1,0 +1,14 @@
+
+Case Convention for Identifiers
+
+One or more words separated by underscores.
+
+Macro and globals have words that are all capital letters.
+
+Type names are first letter of each word capitalized.  There is an include file
+for aliasing C reserved word type names.
+
+Other identifiers are lower case.
+
+
+

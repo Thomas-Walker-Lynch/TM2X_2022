@@ -1,0 +1,8 @@
+
+temporary/
+library/
+cantari-loadable/
+*~
+*.o
+a.out
+

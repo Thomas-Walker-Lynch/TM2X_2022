@@ -1,0 +1,5 @@
+mv CLib·Text.h       CLib.isq     
+mv Inclusive·Text.h  Inclusive.isq
+mv Sequence·Text.h   Sequence.isq 
+mv T02xHdI·Text.h    T02xHdI.isq  
+mv T02x·Text.h       T02x.isq
